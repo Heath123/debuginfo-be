@@ -27,5 +27,16 @@ jobs:
         uses: actions/upload-artifact@v2
         if: success()
         with:
-          name: debuginfo-be
           path:  target/debuginfo-be-1.0-SNAPSHOT.jar
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: |
+            Automatically created by GitHub Actions
+          draft: false
+          prerelease: false
