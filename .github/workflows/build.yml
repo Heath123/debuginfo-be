@@ -23,14 +23,17 @@ jobs:
         uses: snickerbockers/submodules-init@v4
       - name: Build with Maven
         run: mvn -B package
+       - name: Retrieve short commit name
+        run: |
+          echo ::set-env name=TAG_NAME::$(git rev-parse --short HEAD)
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
-          tag_name: ${{ github.event.after::8 }}
-          release_name: ${{ github.event.after::8 }}
+          tag_name: ${{ env.TAG_NAME }}
+          release_name: Commit ${{ env.TAG_NAME }}
           body: |
             Automatically created by GitHub Actions
           draft: false
