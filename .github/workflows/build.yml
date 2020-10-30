@@ -23,7 +23,7 @@ jobs:
         uses: snickerbockers/submodules-init@v4
       - name: Build with Maven
         run: mvn -B package
-       - name: Retrieve short commit name
+      - name: Retrieve short commit name
         run: |
           echo ::set-env name=TAG_NAME::$(git rev-parse --short HEAD)
       - name: Create Release
