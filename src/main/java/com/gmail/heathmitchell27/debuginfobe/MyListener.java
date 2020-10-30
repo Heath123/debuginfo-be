@@ -1,6 +1,7 @@
 package com.gmail.heathmitchell27.debuginfobe;
 
 import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -17,10 +18,11 @@ import org.bukkit.util.BlockIterator;
 
 import java.text.DecimalFormat;
 import java.util.HashMap;
+import java.util.HashSet;
 
 public class MyListener implements Listener
 {
-    private static DecimalFormat df2 = new DecimalFormat("#.###");
+    private static DecimalFormat twoPlaces = new DecimalFormat("#.###");
     static HashMap<Player, BossBar> bossBarMap = new HashMap<>();
 
     @EventHandler
@@ -34,39 +36,41 @@ public class MyListener implements Listener
 
         BossBar currentBossBar = bossBarMap.get(player);
 
+        Block targetBlock = player.getTargetBlockExact(6);
+
         if (currentBossBar == null) {
-            currentBossBar = Bukkit.createBossBar(getBossBarTitle(player, location), BarColor.BLUE, BarStyle.SOLID);
+            currentBossBar = Bukkit.createBossBar(getBossBarTitle(player, location, targetBlock), BarColor.BLUE, BarStyle.SOLID);
             currentBossBar.addPlayer(player);
             bossBarMap.put(player, currentBossBar);
         } else {
-            currentBossBar.setTitle(getBossBarTitle(player, location));
+            currentBossBar.setTitle(getBossBarTitle(player, location, targetBlock));
         }
 
-        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(
-                getTargetBlock(player, 15).getBlockData().getAsString()
-                        .replaceFirst("^minecraft:", "") // Frees up space
-                        .replaceAll(",", ",\n") // Split onto
-                        .replaceAll("\\[", "\n[") // multiple lines
-        ));
-    }
-
-    private static String getBossBarTitle(Player player, Location location) {
-        return "X: " +  df2.format(location.getX()) + " Y: " +  df2.format(location.getY()) +
-                " Z: " +  df2.format(location.getZ());
-    }
-
-    // https://www.spigotmc.org/threads/solved-get-coords-for-a-block-a-player-is-looking-at.64576/
-    // Not the only thing I copied but this is a big chunk of code
-    private static Block getTargetBlock(Player player, int range) {
-        BlockIterator iter = new BlockIterator(player, range);
-        Block lastBlock = iter.next();
-        while (iter.hasNext()) {
-            lastBlock = iter.next();
-            if (lastBlock.getType() == Material.AIR) {
-                continue;
-            }
-            break;
+        if (targetBlock == null || targetBlock.getLocation() == null) {
+            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("-"));
+        } else {
+            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(
+                    targetBlock.getBlockData().getAsString()
+                            .replaceFirst("^minecraft:", "") // Frees up space
+                            .replaceAll(",", ",\n") // Split onto
+                            .replaceAll("\\[", "\n[") // multiple lines
+            ));
         }
-        return lastBlock;
+    }
+
+    private static String getBossBarTitle(Player player, Location location, Block targetBlock) {
+        String debugString = "------- Debug info for Geyser -------\n\n" +
+                "Pos: " +  twoPlaces.format(location.getX()) + " " +  twoPlaces.format(location.getY()) +
+                " " +  twoPlaces.format(location.getZ());
+
+        if (targetBlock == null || targetBlock.getLocation() == null) {
+            debugString += "\nLooking at: - - -";
+        } else {
+            debugString += "\nLooking at: " + (int) targetBlock.getLocation().getX() + " " +
+                    (int) targetBlock.getLocation().getY() + " " +
+                    (int) targetBlock.getLocation().getZ();
+        }
+
+        return debugString;
     }
 }
