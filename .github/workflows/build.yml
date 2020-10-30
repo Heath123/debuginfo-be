@@ -27,5 +27,5 @@ jobs:
         uses: actions/upload-artifact@v2
         if: success()
         with:
-          name: floodgate-noclip
-          path:  target/floodgate-noclip-1.0-SNAPSHOT.jar
+          name: debuginfo-be
+          path:  target/debuginfo-be-1.0-SNAPSHOT.jar
