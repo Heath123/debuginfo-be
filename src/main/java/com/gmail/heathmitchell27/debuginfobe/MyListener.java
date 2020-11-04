@@ -32,6 +32,9 @@ public class MyListener implements Listener
     }
 
     public static void updateInfo(Player player, Location location) {
+        // Return if no brand yet sent
+        if (BrandPluginMessageListener.playerBrands.get(player) == null) return;
+        // Return if not Geyser
         if (!BrandPluginMessageListener.playerBrands.get(player).equals("Geyser")) return;
 
         BossBar currentBossBar = bossBarMap.get(player);
@@ -59,7 +62,7 @@ public class MyListener implements Listener
     }
 
     private static String getBossBarTitle(Player player, Location location, Block targetBlock) {
-        String debugString = "------- Debug info for Geyser -------\n\n" +
+        String debugString = "----- Debug info for Geyser -----\n\n" +
                 "Pos: " +  twoPlaces.format(location.getX()) + " " +  twoPlaces.format(location.getY()) +
                 " " +  twoPlaces.format(location.getZ());
 
@@ -69,6 +72,25 @@ public class MyListener implements Listener
             debugString += "\nLooking at: " + (int) targetBlock.getLocation().getX() + " " +
                     (int) targetBlock.getLocation().getY() + " " +
                     (int) targetBlock.getLocation().getZ();
+        }
+
+        debugString += "\nFacing: ";
+
+        // https://stackoverflow.com/questions/35831619/get-the-direction-a-player-is-looking - second answer
+        float yaw = location.getYaw();
+        if (yaw < 0) {
+            yaw += 360;
+        }
+        if (yaw >= 315 || yaw < 45) {
+            debugString += "south";
+        } else if (yaw < 135) {
+            debugString += "west";
+        } else if (yaw < 225) {
+            debugString += "north";
+        } else if (yaw < 315) {
+            debugString += "east";
+        } else {
+            debugString += "north";
         }
 
         return debugString;
