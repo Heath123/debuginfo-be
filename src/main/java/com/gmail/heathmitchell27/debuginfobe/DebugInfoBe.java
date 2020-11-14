@@ -32,6 +32,8 @@ public class DebugInfoBe extends JavaPlugin {
             }
         }, 0L, 5L);
 
+        this.getCommand("f3").setExecutor(new CommandF3());
+
         getLogger().info("Enabled debuginfo-be!");
     }
 }

@@ -1,11 +1,9 @@
 package com.gmail.heathmitchell27.debuginfobe;
 
 import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
@@ -14,16 +12,19 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.util.BlockIterator;
 
 import java.text.DecimalFormat;
 import java.util.HashMap;
-import java.util.HashSet;
 
 public class MyListener implements Listener
 {
+    public static void main(String[] args) {
+        System.out.println("Hello, world!");
+    }
+
     private static DecimalFormat twoPlaces = new DecimalFormat("#.###");
     static HashMap<Player, BossBar> bossBarMap = new HashMap<>();
+    static HashMap<Player, Boolean> showDebugScreenMap = new HashMap<>();
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent e) {
@@ -38,6 +39,18 @@ public class MyListener implements Listener
         if (!BrandPluginMessageListener.playerBrands.get(player).equals("Geyser")) return;
 
         BossBar currentBossBar = bossBarMap.get(player);
+
+        // If the player boss bar isn't null and should be removed
+        Boolean currentOption = showDebugScreenMap.get(player);
+        if (currentOption == null) currentOption = true;
+
+        if (currentBossBar != null && !currentOption) {
+            // Remove the boss bar
+            currentBossBar.removePlayer(player);
+            bossBarMap.remove(player);
+        }
+
+        if (!currentOption) return;
 
         Block targetBlock = player.getTargetBlockExact(6);
 

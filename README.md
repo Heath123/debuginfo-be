@@ -3,4 +3,10 @@ A quick and dirty Spigot plugin to give F3-like debug info to [Geyser](https://g
 
 [Download](https://github.com/Heath123/debuginfo-be/releases/latest)
 
-![Screenshot](https://media.discordapp.net/attachments/613170125696270357/771818452314226698/debug2.png)
+### Usage
+
+Toggle the debug HUD with `/f3`
+
+### Screenshot 
+
+![Screenshot](https://user-images.githubusercontent.com/13787163/99154162-9d924400-26a5-11eb-85aa-b8dc934c7af3.png)
