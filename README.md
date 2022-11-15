@@ -5,9 +5,7 @@ Now updated!
 [Download](https://github.com/TBYT/debuginfo-be/releases/latest)
 
 ### Support
-#development channel in [Discord](https://discord.geysermc.org/) 
-
-Mention @TBYT
+#development channel in [Discord](https://discord.geysermc.org/)
 
 ### Usage
 
