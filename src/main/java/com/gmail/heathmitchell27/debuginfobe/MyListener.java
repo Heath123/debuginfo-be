@@ -4,10 +4,12 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
+import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,6 +18,16 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 
+/*	Changes Added to Project by TBYT
+ * 	Biome of current player. Edges of biome may not be accurate.
+ * 	Ping.
+ * 	Updated pom.xml to newest api.
+ * 	Difficulty.
+ * 	Current Player World.
+ * 	Current Player Gamemode.
+ * 	Client View Distance.
+ * 	Minimalized code.
+ */
 public class MyListener implements Listener
 {
     public static void main(String[] args) {
@@ -62,31 +74,38 @@ public class MyListener implements Listener
             currentBossBar.setTitle(getBossBarTitle(player, location, targetBlock));
         }
 
-        if (targetBlock == null || targetBlock.getLocation() == null) {
+        if (targetBlock == null || targetBlock.getLocation() == null) 
+        {
             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("-"));
-        } else {
+        }
+        else 
+        {
+        //Light does not work properly, left out of implementation. "(Beta) Light: "+targetBlock.getLightLevel()+" ("+targetBlock.getLightFromSky()+" Sky, "+targetBlock.getLightFromBlocks()+" block)\n"+
             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(
-                    targetBlock.getBlockData().getAsString()
+            		targetBlock.getBlockData().getAsString()
                             .replaceFirst("^minecraft:", "") // Frees up space
                             .replaceAll(",", ",\n") // Split onto
                             .replaceAll("\\[", "\n[") // multiple lines
-            ));
+            +"\nBlock at: " + (int) targetBlock.getLocation().getX() + ", " +
+            (int) targetBlock.getLocation().getY() + ", " +
+            (int) targetBlock.getLocation().getZ()));
         }
     }
 
     private static String getBossBarTitle(Player player, Location location, Block targetBlock) {
-        String debugString = "----- Debug info for Geyser -----\n\n" +
-                "Pos: " +  twoPlaces.format(location.getX()) + " " +  twoPlaces.format(location.getY()) +
-                " " +  twoPlaces.format(location.getZ());
-
-        if (targetBlock == null || targetBlock.getLocation() == null) {
-            debugString += "\nLooking at: - - -";
-        } else {
-            debugString += "\nLooking at: " + (int) targetBlock.getLocation().getX() + " " +
-                    (int) targetBlock.getLocation().getY() + " " +
-                    (int) targetBlock.getLocation().getZ();
-        }
-
+    	World world = player.getWorld();
+        String debugString = "- F3 Debug Info for Geyser -\n\n";
+        debugString += "minecraft:"+world.getName()+"\n";
+        debugString += "Difficulty: "+world.getDifficulty()+"\n";
+        debugString += "Mode: "+ player.getGameMode()+"\n";
+        
+        debugString += "Ping: "+((CraftPlayer) player).getPing()+"\n";
+        
+        debugString += "Pos: " +  twoPlaces.format(location.getX()) + ", " +  twoPlaces.format(location.getY()) +
+                ", " +  twoPlaces.format(location.getZ());
+        
+        debugString += "\nBiome: "+world.getBiome(location);
+        
         debugString += "\nFacing: ";
 
         // https://stackoverflow.com/questions/35831619/get-the-direction-a-player-is-looking - second answer
@@ -106,6 +125,8 @@ public class MyListener implements Listener
             debugString += "north";
         }
 
+        debugString += "\nClient View Distance: "+ player.getClientViewDistance();
+        
         return debugString;
     }
 }
