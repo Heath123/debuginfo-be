@@ -9,7 +9,6 @@ import org.bukkit.block.Block;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
-import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -98,8 +97,6 @@ public class MyListener implements Listener
         debugString += "minecraft:"+world.getName()+"\n";
         debugString += "Difficulty: "+world.getDifficulty()+"\n";
         debugString += "Mode: "+ player.getGameMode()+"\n";
-        
-        debugString += "Ping: "+((CraftPlayer) player).getPing()+"\n";
         
         debugString += "Pos: " +  twoPlaces.format(location.getX()) + ", " +  twoPlaces.format(location.getY()) +
                 ", " +  twoPlaces.format(location.getZ());
