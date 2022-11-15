@@ -4,6 +4,9 @@ Now updated!
 
 [Download](https://github.com/TBYT/debuginfo-be/releases/latest)
 
+### Support
+[Discord](https://discord.geysermc.org/) #development channel
+
 ### Usage
 
 Toggle the debug HUD with `/f3`
