@@ -6,6 +6,7 @@ Now updated!
 
 ### Support
 #development channel in [Discord](https://discord.geysermc.org/) 
+
 Mention @TBYT
 
 ### Usage
