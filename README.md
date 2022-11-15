@@ -1,7 +1,12 @@
 # debuginfo-be
-A quick and dirty Spigot plugin to give F3-like debug info to [Geyser](https://github.com/GeyserMC/Geyser) clients
+A small quick Spigot plugin to give F3-like debug info to [Geyser](https://github.com/GeyserMC/Geyser) clients!
+Now updated!
 
-[Download](https://github.com/Heath123/debuginfo-be/releases/latest)
+[Download](https://github.com/TBYT/debuginfo-be/releases/latest)
+
+### Support
+#development channel in [Discord](https://discord.geysermc.org/)
+Mention @Circuit10 or @TBYT
 
 ### Usage
 
@@ -9,4 +14,4 @@ Toggle the debug HUD with `/f3`
 
 ### Screenshot 
 
-![Screenshot](https://user-images.githubusercontent.com/13787163/99154162-9d924400-26a5-11eb-85aa-b8dc934c7af3.png)
+![Screenshot](https://user-images.githubusercontent.com/48810871/201893669-947f5f49-a0f0-4baf-af61-4dfc7a137ba3.JPG)
