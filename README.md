@@ -2,10 +2,11 @@
 A small quick Spigot plugin to give F3-like debug info to [Geyser](https://github.com/GeyserMC/Geyser) clients!
 Now updated!
 
-[Download](https://github.com/TBYT/debuginfo-be/releases/latest)
+[Download](https://github.com/Heath123/debuginfo-be/releases/latest)
 
 ### Support
 #development channel in [Discord](https://discord.geysermc.org/)
+
 Mention @Circuit10 or @TBYT
 
 ### Usage
