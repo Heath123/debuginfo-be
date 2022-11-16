@@ -3,6 +3,7 @@ package com.gmail.heathmitchell27.debuginfobe;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -18,10 +19,11 @@ import java.text.DecimalFormat;
 import java.util.HashMap;
 
 /*	Changes Added to Project by TBYT
- * 	Biome of current player. Edges of biome may not be accurate.
- * 	Ping.
+ * 	Biome of current player. Edges of biome may not be accurate for determining correct biome.
  * 	Updated pom.xml to newest api.
  * 	Difficulty.
+ * 	Current Chunk.
+ * 	Exclusive: Chunk Borders for Bedrock Players! inline edge of the 16x16 chunk is displayed as a border.
  * 	Current Player World.
  * 	Current Player Gamemode.
  * 	Client View Distance.
@@ -79,7 +81,7 @@ public class MyListener implements Listener
         }
         else 
         {
-        //Light does not work properly, left out of implementation. "(Beta) Light: "+targetBlock.getLightLevel()+" ("+targetBlock.getLightFromSky()+" Sky, "+targetBlock.getLightFromBlocks()+" block)\n"+
+        //Light does not work properly, left out of implementation: new TextComponent("Light: "+targetBlock.getLightLevel()+" ("+targetBlock.getLightFromSky()+" Sky, "+targetBlock.getLightFromBlocks()+" block)\n"+
             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(
             		targetBlock.getBlockData().getAsString()
                             .replaceFirst("^minecraft:", "") // Frees up space
@@ -91,8 +93,38 @@ public class MyListener implements Listener
         }
     }
 
-    private static String getBossBarTitle(Player player, Location location, Block targetBlock) {
-    	World world = player.getWorld();
+	private static String getBossBarTitle(Player player, Location location, Block targetBlock) {
+		World world = player.getWorld();
+		Chunk chunk = world.getChunkAt(player.getLocation());
+		int y = (int) player.getLocation().getY();
+		for (int i = 0; i < 16; i++) {
+			if (i == 8) {
+				y = (int) player.getLocation().getY();
+			}
+			if (i < 8 && i!=0) {
+				y++;
+			} 
+			else if (i > 7) {
+				y--;
+			}
+			for (int x = 0; x < 16; x++) {
+				if (x==0 || x==15) {
+					for (int z = 0; z < 16; z++) {
+							Block b = chunk.getBlock(x, y, z);
+							player.sendBlockDamage(b.getLocation(), 1.0f);
+					}
+				}
+			}
+			for (int z = 0; z < 16; z++) {
+				if (z==0 || z==15) {
+					for (int x = 0; x < 16; x++) {
+							Block b = chunk.getBlock(x, y, z);
+							player.sendBlockDamage(b.getLocation(), 1.0f);
+					}
+				}
+			}
+		}
+		
         String debugString = "- F3 Debug Info for Geyser -\n\n";
         debugString += "minecraft:"+world.getName()+"\n";
         debugString += "Difficulty: "+world.getDifficulty()+"\n";
@@ -100,6 +132,8 @@ public class MyListener implements Listener
         
         debugString += "Pos: " +  twoPlaces.format(location.getX()) + ", " +  twoPlaces.format(location.getY()) +
                 ", " +  twoPlaces.format(location.getZ());
+        
+        debugString += "\nChunk: "+chunk.getX()+","+chunk.getZ();
         
         debugString += "\nBiome: "+world.getBiome(location);
         
