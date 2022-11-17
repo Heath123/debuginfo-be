@@ -57,8 +57,8 @@
                 </configuration>
             </plugin>
             <plugin>
-	         <artifactId>maven-release-plugin</artifactId>
-		<version>${maven-release-plugin.version}</version>
+	        <artifactId>maven-release-plugin</artifactId>
+		<version>1.12.37</version>
 		<configuration>
 			<scmCommentPrefix>[ci skip]</scmCommentPrefix>
 			<tagNameFormat>@{project.version}</tagNameFormat>
