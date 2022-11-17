@@ -45,4 +45,4 @@ Toggle the debug HUD with `/f3`
 
 ### Video Showcase
 
-![Coming Soon]()
+![Coming Soon](https://github.com/Heath123/debuginfo-be)
