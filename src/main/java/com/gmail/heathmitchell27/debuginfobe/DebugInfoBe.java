@@ -2,8 +2,6 @@ package com.gmail.heathmitchell27.debuginfobe;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.Messenger;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -33,7 +31,7 @@ public class DebugInfoBe extends JavaPlugin {
         }, 0L, 5L);
 
         this.getCommand("f3").setExecutor(new CommandF3());
-
+        this.getCommand("debuginfo-be").setExecutor(new CommandF3());
         getLogger().info("Enabled debuginfo-be!");
     }
 }

@@ -1,8 +1,11 @@
 name: debuginfo-be
-version: 1.0.0
+version: 1.0
 main: com.gmail.heathmitchell27.debuginfobe.DebugInfoBe
-api-version: 1.16
+api-version: 1.19
 commands:
   f3:
-    description: Toggles the debug menu
+    description: Toggles the debug menu.
     usage: /f3
+  debuginfo-be:
+    description: Information about the Plugin.
+    usage: /debuginfo-be
