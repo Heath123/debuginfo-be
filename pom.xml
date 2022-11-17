@@ -63,7 +63,7 @@
 			<scmCommentPrefix>[ci skip]</scmCommentPrefix>
 			<tagNameFormat>@{project.version}</tagNameFormat>
 		</configuration>
-	         </plugin>
+	    </plugin>
         </plugins>
     </build>
 </project>
