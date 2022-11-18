@@ -53,7 +53,7 @@ jobs:
         path: staging/debuginfo-be.jar
     - name: Generate release diff
       env:
-        BEGIN_COMMIT: TAG_NAME::$(git rev-parse --short HEAD)
+        BEGIN_COMMIT: $(git rev-parse --short HEAD)
         END_COMMIT: ${{ steps.lookupPluginVersion.outputs.result }}
       run: git fetch --tags --force && git log --pretty=format:"* %s (%h)" ${BEGIN_COMMIT}..${END_COMMIT} > release_notes.md
     - name: Create release
@@ -64,7 +64,7 @@ jobs:
         bodyFile: "release_notes.md"
         draft: false
         prerelease: false
-        tag: TAG_NAME::$(git rev-parse --short HEAD) #steps.lookupPluginVersion.outputs.result
+        tag: $(git rev-parse --short HEAD) #steps.lookupPluginVersion.outputs.result
         token: ${{ secrets.GITHUB_TOKEN }}
 #     - name: Upload jar to server
 #       env:
