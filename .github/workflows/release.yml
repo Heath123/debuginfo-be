@@ -14,21 +14,21 @@ jobs:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
-    - name: Get previous tag
-      id: get-previous-tag
-      uses: actions-ecosystem/action-get-latest-tag@v1
-    - name: Get Plugin Version from plugin.yml
-      id: lookupPluginVersion
-      uses: mikefarah/yq@master
-      with:
-        cmd: yq eval -p xml '.project.properties | .["minecraft.plugin.version"]' pom.xml
-    - name: Bump version and push tag
-      id: tag_version
-      uses: mathieudutour/github-tag-action@v5.5
-      with:
-         github_token: ${{ secrets.GITHUB_TOKEN }}
-         tag_prefix: ''
-         custom_tag: ${{ steps.lookupPluginVersion.outputs.result }}
+#     - name: Get previous tag
+#       id: get-previous-tag
+#       uses: actions-ecosystem/action-get-latest-tag@v1
+#     - name: Get Plugin Version from plugin.yml
+#       id: lookupPluginVersion
+#       uses: mikefarah/yq@master
+#       with:
+#         cmd: yq eval -p xml '.project.properties | .["minecraft.plugin.version"]' pom.xml
+#     - name: Bump version and push tag
+#       id: tag_version
+#       uses: mathieudutour/github-tag-action@v5.5
+#       with:
+#          github_token: ${{ secrets.GITHUB_TOKEN }}
+#          tag_prefix: ''
+#          custom_tag: ${{ steps.lookupPluginVersion.outputs.result }}
     - name: Set up JDK 17
       uses: actions/setup-java@v1
       with:
@@ -44,27 +44,27 @@ jobs:
     - name: Build with Maven
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SNW_VERSION: ${{ steps.lookupPluginVersion.outputs.result }}
-      run: mvn -Drevision=${SNW_VERSION} clean package
+        #SNW_VERSION: ${{ steps.lookupPluginVersion.outputs.result }}
+      run: mvn  clean package #mvn -Drevision=${SNW_VERSION} clean package
     - run: mkdir staging && cp target/debuginfo-be.jar staging
     - uses: actions/upload-artifact@v2
       with:
         name: DebugInfo-Be-Plugin-Latest
         path: staging/debuginfo-be.jar
-    - name: Generate release diff
-      env:
-        BEGIN_COMMIT: ${{ steps.lookupPluginVersion.outputs.result }}
-        END_COMMIT: ${{ steps.lookupPluginVersion.outputs.result }}
-      run: git fetch --tags --force && git log --pretty=format:"* %s (%h)" ${BEGIN_COMMIT}..${END_COMMIT} > release_notes.md
+#     - name: Generate release diff
+#       env:
+#         BEGIN_COMMIT: ${{ steps.get-previous-tag.outputs.tag }}
+#         END_COMMIT: ${{ steps.lookupPluginVersion.outputs.result }}
+#       run: git fetch --tags --force && git log --pretty=format:"* %s (%h)" ${BEGIN_COMMIT}..${END_COMMIT} > release_notes.md
     - name: Create release
       uses: ncipollo/release-action@v1
       with:
         artifacts: staging/debuginfo-be.jar
         allowUpdates: true
-        bodyFile: "release_notes.md"
+        bodyFile: "README.md"#"release_notes.md"
         draft: false
         prerelease: false
-        tag: ${{steps.lookupPluginVersion.outputs.result}}
+        tag: "release" #${{steps.lookupPluginVersion.outputs.result}}
         token: ${{ secrets.GITHUB_TOKEN }}
 #     - name: Upload jar to server
 #       env:
