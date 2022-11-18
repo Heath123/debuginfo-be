@@ -22,13 +22,13 @@ jobs:
       uses: mikefarah/yq@master
       with:
         cmd: yq eval -p xml '.project.properties | .["minecraft.plugin.version"]' pom.xml
-#     - name: Bump version and push tag
-#       id: tag_version
-#       uses: mathieudutour/github-tag-action@v5.5
-#       with:
-#         github_token: ${{ secrets.GITHUB_TOKEN }}
-#         tag_prefix: ''
-#         custom_tag: ${{ steps.lookupPluginVersion.outputs.result }}
+    - name: Bump version and push tag
+      id: tag_version
+      uses: mathieudutour/github-tag-action@v5.5
+      with:
+         github_token: ${{ secrets.GITHUB_TOKEN }}
+         tag_prefix: ''
+         custom_tag: ${{ steps.lookupPluginVersion.outputs.result }}
     - name: Set up JDK 17
       uses: actions/setup-java@v1
       with:
@@ -53,7 +53,7 @@ jobs:
         path: staging/debuginfo-be.jar
     - name: Generate release diff
       env:
-        BEGIN_COMMIT: ::$(git rev-parse --short HEAD)
+        BEGIN_COMMIT: ${{ steps.lookupPluginVersion.outputs.result }}
         END_COMMIT: ${{ steps.lookupPluginVersion.outputs.result }}
       run: git fetch --tags --force && git log --pretty=format:"* %s (%h)" ${BEGIN_COMMIT}..${END_COMMIT} > release_notes.md
     - name: Create release
@@ -64,7 +64,7 @@ jobs:
         bodyFile: "release_notes.md"
         draft: false
         prerelease: false
-        tag: ::$(git rev-parse --short HEAD) #steps.lookupPluginVersion.outputs.result
+        tag: ${{steps.lookupPluginVersion.outputs.result}}
         token: ${{ secrets.GITHUB_TOKEN }}
 #     - name: Upload jar to server
 #       env:
