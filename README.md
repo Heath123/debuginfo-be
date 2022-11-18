@@ -1,9 +1,9 @@
 # debuginfo-be
 A small quick Spigot plugin to give F3-like debug info to [Geyser](https://github.com/GeyserMC/Geyser) clients!
 
-Featured on the Official [Geyser Wiki](https://wiki.geysermc.org/other/developer-guide/)
+Featured on the Official [Geyser Wiki](https://wiki.geysermc.org/other/developer-guide/)!
 
-[Download](https://github.com/Heath123/debuginfo-be/releases/latest)
+### - [Download](https://github.com/Heath123/debuginfo-be/releases/latest) 
 
 ### Current Features
 - Current Position with decimals.
@@ -13,7 +13,7 @@ Featured on the Official [Geyser Wiki](https://wiki.geysermc.org/other/developer
 - Show's the data of the block player is looking at.
 
 - Show's the direction player is facing.
-
+ - -
 - Biome of current player.
 - - Blocks Edges at the of biome may not be accurate for determining correct biome, when compared to Java debugging.
 
@@ -24,7 +24,7 @@ Featured on the Official [Geyser Wiki](https://wiki.geysermc.org/other/developer
 - Current Chunk. (X,Z)
 
 - Chunk Borders! 
-- - inline edge of the 16x16 chunk is displayed as a border with block breaking animation or particle animation.(Thanks TBYT).
+- - inline edge of the 16x16 chunk is displayed as a border with block breaking animation or particle animation. (Thanks TBYT).
 
 - Current Player World/Dimension.
 
