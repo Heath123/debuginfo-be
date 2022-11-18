@@ -5,7 +5,7 @@ Featured on the Official [Geyser Wiki](https://wiki.geysermc.org/other/developer
 
 ### - [Download](https://github.com/Heath123/debuginfo-be/releases/latest) 
 
-### Current Features
+## Current Features
 - Current Position with decimals.
 
 - Show's the position of the block player is looking at.
@@ -32,12 +32,12 @@ Featured on the Official [Geyser Wiki](https://wiki.geysermc.org/other/developer
 
 - Server View Distance & Server Simulation Distance.
 
-### Support
-#development channel in [Discord](https://discord.geysermc.org/)
+## Support
+### development channel in [Discord](https://discord.geysermc.org/)
 
 Mention @Circuit10 or @TBYT
 
-### Usage
+## Usage
 
 Toggle the debug HUD with `/f3`
 
@@ -47,10 +47,10 @@ Toggle the Chunk Border Particle Level with `/f3 <ParticleLevel>`
 
 Information about this plugin use `/debuginfo-be`
 
-### Screenshot 
+## Screenshot 
 
 ![Screenshot](https://user-images.githubusercontent.com/48810871/202431633-88617526-3171-43e6-9200-20146c5066b5.JPG)
 
-### Video Showcase
+## Video Showcase
 
 ![Coming Soon](https://github.com/Heath123/debuginfo-be)
