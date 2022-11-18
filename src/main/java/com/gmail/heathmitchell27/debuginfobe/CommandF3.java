@@ -24,19 +24,41 @@ public class CommandF3 implements CommandExecutor {
 	            }
 	
 	            Boolean currentOption = MyListener.showDebugScreenMap.get(player);
-	            if (currentOption == null) currentOption = true;
+	            if (currentOption == null) currentOption = false;
 	
-	            MyListener.showDebugScreenMap.put(player, !currentOption);
+	            try {
+	            	if(args.length==1)
+	            	{
+	            		int number = Integer.parseInt(args[0]);
+	            		MyListener.particleLevel = number;
+	            	}
+	            }
+	            catch (NumberFormatException e) {
+	            	help(sender);
+	            }
+	            if(args.length==0)
+	            	MyListener.showDebugScreenMap.put(player, !currentOption);
 	        } else {
 	            sender.sendMessage(ChatColor.RED + "You cannot use this from the console!");
 	        }
         }
         else if(label.equals("debuginfo-be"))
         {
-        	sender.sendMessage(ChatColor.AQUA + "This plugin displays debug information for Bedrock Edition Players!\n"
+        	if(args.length>0)
+        		help(sender);
+        	else
+        		sender.sendMessage(ChatColor.AQUA + "This plugin displays debug information for Bedrock Edition Players!\n"
         			+ "Endorsed by Geyser on https://wiki.geysermc.org/other/developer-guide/"
-        			+ "\nReleases: https://github.com/Heath123/debuginfo-be/releases");
+        			+ "\nReleases: https://github.com/Heath123/debuginfo-be/releases"
+        			+ "\nFor commands use /f3 ?");
         }
         return true;
+    }
+    
+    public void help(CommandSender sender)
+    {
+    	sender.sendMessage(ChatColor.AQUA + "\nUse /f3 <ParticleLevel> for the amount of particles each block height."+"\nUsing \"/f3 0\" will turn off particles from spawning."
+	            +"\nExample of usage is \"/f3 1\" will show 4 levels of particles. (2 levels from player position to above your head and 2 below your head)"
+	            +"\n/f3 by default uses level 3. (12 total levels in height, 6 above 6 below.");
     }
 }

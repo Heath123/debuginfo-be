@@ -17,6 +17,7 @@ import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
@@ -46,7 +47,8 @@ public class MyListener implements Listener
     static HashMap<Player, BossBar> bossBarMap = new HashMap<>();
     static HashMap<Player, Boolean> showDebugScreenMap = new HashMap<>();
     private static int alternatingTicks = 0; //offsets the bukkitscheduler period every interval.
-    private static World prevWorld;
+	static int particleLevel = 3;
+	static boolean changedDimensionsEvent;
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) 
@@ -57,6 +59,8 @@ public class MyListener implements Listener
     	{
     		return;
     	}
+    	String defaultMessage = e.getJoinMessage();
+		e.setJoinMessage(defaultMessage+"\n"+ChatColor.AQUA+"Use /f3 to disable or enable debug menu.");
 		e.getPlayer().sendMessage("\n"+ChatColor.AQUA+"Use /f3 to disable or enable debug menu.");
     }
     
@@ -66,6 +70,13 @@ public class MyListener implements Listener
         Player player = e.getPlayer();
         updateInfo(player, e.getTo());
     }
+    
+    @EventHandler
+    public void onDimensionChange(PlayerChangedWorldEvent e)
+    {
+    	changedDimensionsEvent = true;
+    	alternatingTicks=0;
+    }
 
     public static void updateInfo(Player player, Location location) {
         // Return if no brand yet sent
@@ -74,10 +85,12 @@ public class MyListener implements Listener
         if (!BrandPluginMessageListener.playerBrands.get(player).equals("Geyser")) return;
         BossBar currentBossBar = bossBarMap.get(player);
 
-        // If the player boss bar isn't null and should be removed
         Boolean currentOption = showDebugScreenMap.get(player);
-        if (currentOption == null) currentOption = true;
+        //start with debug off.
+        if (currentOption == null) 
+        	currentOption = false;
 
+     // If the player boss bar isn't null and should be removed
         if (currentBossBar != null && !currentOption) {
             // Remove the boss bar
             currentBossBar.removePlayer(player);
@@ -93,11 +106,14 @@ public class MyListener implements Listener
             bossBarMap.put(player, currentBossBar);
         } else {
         	// When switching dimensions, bossbar does not appear, reenable when switching dimenions only.
-            if(player.getWorld()!=prevWorld)
-            {
-            	currentBossBar.removePlayer(player);
+        	// If bossbar immediately does not appear, stand still for 4 intervals.
+        	if(changedDimensionsEvent==true&&alternatingTicks>3)
+        	{
+        		currentBossBar.removePlayer(player);
             	currentBossBar.addPlayer(player);
-            }
+            	changedDimensionsEvent = false;
+        	}
+        	
             currentBossBar.setTitle(getBossBarTitle(player, location));
             if(alternatingTicks>0&&alternatingTicks%5==0)
     		{
@@ -129,70 +145,84 @@ public class MyListener implements Listener
 		String debugString = "- F3 Debug Info for Geyser -\n\n";
 		World world = player.getWorld();
 		Chunk chunk = world.getChunkAt(player.getLocation());
-		debugString += "minecraft:"+world.getName()+"\n";
-		debugString += "Time:"+world.getTime()+"\n";
 		
 		//adding alternating intervals decreases amount of times visual effect appears, reducing lag.
-		if(alternatingTicks%2==0)
+		if(particleLevel>10)
 		{
-			int y = (int) player.getLocation().getY();
-			for (int i = 0; i < 16; i++) {
-				if (i == 8) {
-					y = (int) player.getLocation().getY();
-				}
-				if (i < 8 && i != 0) {
-					y++;
-				} else if (i > 7) {
-					y--;
-				}
-				for (int x = 0; x < 16; x++) {
-					if (x == 0 || x == 15) {
-						for (int z = 0; z < 16; z++) {
-							Block b = chunk.getBlock(x, y, z);
-							if(b.getBlockData().getMaterial()!=Material.WATER && b.getBlockData().getMaterial()!=Material.LAVA)
-							{
-								if(b.getBlockData().getMaterial()==Material.AIR || b.getBlockData().getMaterial()==Material.CAVE_AIR)
-								{
-									world.spawnParticle(Particle.FIREWORKS_SPARK, b.getLocation().getX()+0.5, b.getLocation().getY()+0.5, b.getLocation().getZ()+0.5, 1);
-								}
-								else {
-									player.sendBlockDamage(b.getLocation(), 1.0f);
+			particleLevel=3;
+			player.sendMessage("\n"+ChatColor.RED+"Number too large for particles!");
+		}
+		int n = particleLevel*4;
+		if(particleLevel==0)
+		{
+			n=1;
+		}
+
+			if(alternatingTicks%2==0)
+			{
+				int y = (int) player.getLocation().getY()+1;
+				for (int i = 0; i < n; i++) {
+					if (i == (n/2)) {
+						y = (int) player.getLocation().getY()+1;
+					}
+					if (i < (n/2)&& i != 0) {
+						y++;
+					} else if (i > ((n/2)-1)) {
+						y--;
+					}
+					for (int x = 0; x < 16; x++) {
+						if (x == 0 || x == 15) {
+							for (int z = 0; z < 16; z++) {
+								if(y<321&&y>-65) {
+									Block b = chunk.getBlock(x, y, z);
+									if(b.getBlockData().getMaterial()!=Material.WATER && b.getBlockData().getMaterial()!=Material.LAVA)
+									{
+										if((b.getBlockData().getMaterial()==Material.AIR || b.getBlockData().getMaterial()==Material.CAVE_AIR) && particleLevel!=0)
+										{
+											world.spawnParticle(Particle.FIREWORKS_SPARK, b.getLocation().getX()+0.5, b.getLocation().getY()+0.5, b.getLocation().getZ()+0.5, 1);
+										}
+										else {
+											player.sendBlockDamage(b.getLocation(), 1.0f);
+										}
+									}
 								}
 							}
 						}
 					}
-				}
-				for (int z = 0; z < 16; z++) {
-					if (z == 0 || z == 15) {
-						for (int x = 0; x < 16; x++) {
-							Block b = chunk.getBlock(x, y, z);
-							if(b.getBlockData().getMaterial()!=Material.WATER && b.getBlockData().getMaterial()!=Material.LAVA)
-							{
-								if(b.getBlockData().getMaterial()==Material.AIR || b.getBlockData().getMaterial()==Material.CAVE_AIR)
-								{
-									world.spawnParticle(Particle.FIREWORKS_SPARK, b.getLocation().getX()+0.5, b.getLocation().getY()+0.5, b.getLocation().getZ()+0.5, 1);
-								}
-								else {
-									player.sendBlockDamage(b.getLocation(), 1.0f);
+					for (int z = 0; z < 16; z++) {
+						if (z == 0 || z == 15) {
+							for (int x = 0; x < 16; x++) {
+								if(y<321&&y>-65) {
+									Block b = chunk.getBlock(x, y, z);
+									if(b.getBlockData().getMaterial()!=Material.WATER && b.getBlockData().getMaterial()!=Material.LAVA)
+									{
+										if((b.getBlockData().getMaterial()==Material.AIR || b.getBlockData().getMaterial()==Material.CAVE_AIR) && particleLevel!=0)
+										{
+											world.spawnParticle(Particle.FIREWORKS_SPARK, b.getLocation().getX()+0.5, b.getLocation().getY()+0.5, b.getLocation().getZ()+0.5, 1);
+										}
+										else {
+											player.sendBlockDamage(b.getLocation(), 1.0f);
+										}
+									}
 								}
 							}
 						}
 					}
 				}
 			}
-		}
+		
 		alternatingTicks++;
 		
-        debugString += "Difficulty: "+world.getDifficulty()+"\n";
-        debugString += "Mode: "+ player.getGameMode()+"\n";
-        
+		debugString += "minecraft:"+world.getName();
+        debugString += "\nDifficulty: "+world.getDifficulty();
+        debugString += "\nMode: "+ player.getGameMode();
+        debugString += "\nView Distance: "+ player.getServer().getViewDistance();
+        debugString += "\nSimulation Distance: "+ player.getServer().getSimulationDistance();
+        debugString += "\nTime:"+world.getTime()+"\n";
         debugString += "Pos: " +  twoPlaces.format(location.getX()) + ", " +  twoPlaces.format(location.getY()) +
                 ", " +  twoPlaces.format(location.getZ());
-        
         debugString += "\nChunk: "+chunk.getX()+","+chunk.getZ();
-        
         debugString += "\nBiome: "+world.getBiome(location);
-        
         debugString += "\nFacing: ";
 
         // https://stackoverflow.com/questions/35831619/get-the-direction-a-player-is-looking - second answer
@@ -211,9 +241,6 @@ public class MyListener implements Listener
         } else {
             debugString += "north (towards -Z)";
         }
-        
-        debugString += "\nServer View Distance: "+ player.getServer().getViewDistance();
-        debugString += "\nServer Simulation Distance: "+ player.getServer().getSimulationDistance();
         
         return debugString;
     }
