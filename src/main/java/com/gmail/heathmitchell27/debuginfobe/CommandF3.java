@@ -50,6 +50,7 @@ public class CommandF3 implements CommandExecutor {
         		sender.sendMessage(ChatColor.AQUA + "This plugin displays debug information for Bedrock Edition Players!\n"
         			+ "Endorsed by Geyser on https://wiki.geysermc.org/other/developer-guide/"
         			+ "\nReleases: https://github.com/Heath123/debuginfo-be/releases"
+        			+ "\nSupport: https://discord.geysermc.org"
         			+ "\nFor commands use /f3 ?");
         }
         return true;
