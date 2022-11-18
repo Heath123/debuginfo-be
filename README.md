@@ -1,5 +1,6 @@
 # debuginfo-be
 A small quick Spigot plugin to give F3-like debug info to [Geyser](https://github.com/GeyserMC/Geyser) clients!
+
 Featured on the Official [Geyser Wiki](https://wiki.geysermc.org/other/developer-guide/)
 
 [Download](https://github.com/Heath123/debuginfo-be/releases/latest)
