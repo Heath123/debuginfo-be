@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.gmail.heathmitchell27</groupId>
-    <artifactId>debuginfo-be</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <artifactId>debuginfo</artifactId>
+    <version>be</version>
 
     <repositories>
         <repository>
@@ -22,7 +22,14 @@
             <url>https://repo.nukkitx.com/maven-snapshots/</url>
         </repository>
     </repositories>
-
+         
+    <scm>
+	<connection>scm:git:${project.scm.url}</connection>
+	<developerConnection>scm:git:${project.scm.url}</developerConnection>
+	<url>https://github.com/TBYT/debuginfo-be.git</url>
+	<tag>HEAD</tag>
+    </scm>
+         
     <dependencies>
         <dependency>
             <groupId>org.spigotmc</groupId>
@@ -49,8 +56,14 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
+            <plugin>
+	        <artifactId>maven-release-plugin</artifactId>
+		<version>1.12.37</version>
+		<configuration>
+			<scmCommentPrefix>[ci skip]</scmCommentPrefix>
+			<tagNameFormat>@{project.version}</tagNameFormat>
+		</configuration>
+	    </plugin>
         </plugins>
     </build>
-
-
 </project>
