@@ -46,7 +46,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SNW_VERSION: ${{ steps.lookupPluginVersion.outputs.result }}
       run: mvn -Drevision=${SNW_VERSION} clean package
-    - run: mkdir staging && cp target/ParadisuPlugin.jar staging
+    - run: mkdir staging && cp target/debuginfo-be.jar staging
     - uses: actions/upload-artifact@v2
       with:
         name: DebugInfo-Be-Plugin-Latest
