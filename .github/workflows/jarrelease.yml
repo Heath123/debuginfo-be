@@ -9,6 +9,11 @@ on:
             - "master"
         paths:
             - "pom.xml"
+    pull_request:
+        branches:
+            - "master"
+        paths:
+            - "pom.xml"
 
 jobs:
   build:
