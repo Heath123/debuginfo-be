@@ -39,6 +39,12 @@ Mention @Circuit10 or @TBYT
 
 Toggle the debug HUD with `/f3`
 
+Toggle the Chunk Border Particle Level with `/f3 <ParticleLevel>`
+- An example would be `/f3 2`
+- More information about command `/f3 ?`
+
+Information about this plugin use `/debuginfo-be`
+
 ### Screenshot 
 
 ![Screenshot](https://user-images.githubusercontent.com/48810871/202431633-88617526-3171-43e6-9200-20146c5066b5.JPG)
