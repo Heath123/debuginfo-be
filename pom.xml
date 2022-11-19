@@ -23,13 +23,6 @@
         </repository>
     </repositories>
          
-    <scm>
-	<connection>scm:git:${project.scm.url}</connection>
-	<developerConnection>scm:git:${project.scm.url}</developerConnection>
-	<url>https://github.com/TBYT/debuginfo-be.git</url>
-	<tag>HEAD</tag>
-    </scm>
-         
     <dependencies>
         <dependency>
             <groupId>org.spigotmc</groupId>
@@ -56,14 +49,6 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
-            <plugin>
-	        <artifactId>maven-release-plugin</artifactId>
-		<version>1.12.37</version>
-		<configuration>
-			<scmCommentPrefix>[ci skip]</scmCommentPrefix>
-			<tagNameFormat>@{project.version}</tagNameFormat>
-		</configuration>
-	    </plugin>
         </plugins>
     </build>
 </project>

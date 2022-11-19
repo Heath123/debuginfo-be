@@ -47,7 +47,7 @@ public class MyListener implements Listener
     static HashMap<Player, BossBar> bossBarMap = new HashMap<>();
     static HashMap<Player, Boolean> showDebugScreenMap = new HashMap<>();
     private static int alternatingTicks = 0; //offsets the bukkitscheduler period every interval.
-	static int particleLevel = 3;
+	static int particleLevel = 2;
 	static boolean changedDimensionsEvent;
 
     @EventHandler
@@ -106,8 +106,8 @@ public class MyListener implements Listener
             bossBarMap.put(player, currentBossBar);
         } else {
         	// When switching dimensions, bossbar does not appear, reenable when switching dimenions only.
-        	// If bossbar immediately does not appear, stand still for 4 intervals.
-        	if(changedDimensionsEvent==true&&alternatingTicks>3)
+        	// If bossbar immediately does not appear, stand still for 8 intervals. (2 seconds)
+        	if(changedDimensionsEvent==true&&alternatingTicks==8)
         	{
         		currentBossBar.removePlayer(player);
             	currentBossBar.addPlayer(player);
@@ -149,60 +149,54 @@ public class MyListener implements Listener
 		//adding alternating intervals decreases amount of times visual effect appears, reducing lag.
 		if(particleLevel>10)
 		{
-			particleLevel=3;
+			particleLevel=2;
 			player.sendMessage("\n"+ChatColor.RED+"Number too large for particles!");
 		}
 		int n = particleLevel*4;
-		if(particleLevel==0)
-		{
-			n=1;
-		}
 
-			if(alternatingTicks%2==0)
-			{
-				int y = (int) player.getLocation().getY()+1;
-				for (int i = 0; i < n; i++) {
-					if (i == (n/2)) {
-						y = (int) player.getLocation().getY()+1;
-					}
-					if (i < (n/2)&& i != 0) {
-						y++;
-					} else if (i > ((n/2)-1)) {
-						y--;
-					}
-					for (int x = 0; x < 16; x++) {
-						if (x == 0 || x == 15) {
-							for (int z = 0; z < 16; z++) {
-								if(y<321&&y>-65) {
-									Block b = chunk.getBlock(x, y, z);
-									if(b.getBlockData().getMaterial()!=Material.WATER && b.getBlockData().getMaterial()!=Material.LAVA)
-									{
-										if((b.getBlockData().getMaterial()==Material.AIR || b.getBlockData().getMaterial()==Material.CAVE_AIR) && particleLevel!=0)
-										{
-											world.spawnParticle(Particle.FIREWORKS_SPARK, b.getLocation().getX()+0.5, b.getLocation().getY()+0.5, b.getLocation().getZ()+0.5, 1);
-										}
-										else {
-											player.sendBlockDamage(b.getLocation(), 1.0f);
-										}
+		if (alternatingTicks % 2 == 0) {
+			int y = (int) player.getLocation().getY() + 1;
+			for (int i = 0; i < n; i++) {
+				if (i == (n / 2)) {
+					y = (int) player.getLocation().getY() + 1;
+				}
+				if (i < (n / 2) && i != 0) {
+					y++;
+				} else if (i > ((n / 2) - 1)) {
+					y--;
+				}
+				for (int x = 0; x < 16; x++) {
+					if (x == 0 || x == 15) {
+						for (int z = 0; z < 16; z++) {
+							if (y < 321 && y > -65) {
+								Block b = chunk.getBlock(x, y, z);
+								if (b.getBlockData().getMaterial() != Material.WATER
+										&& b.getBlockData().getMaterial() != Material.LAVA) {
+									if ((b.getBlockData().getMaterial() == Material.AIR
+											|| b.getBlockData().getMaterial() == Material.CAVE_AIR)) {
+										world.spawnParticle(Particle.FIREWORKS_SPARK, b.getLocation().getX() + 0.5,
+												b.getLocation().getY() + 0.5, b.getLocation().getZ() + 0.5, 1);
+									} else {
+										player.sendBlockDamage(b.getLocation(), 1.0f);
 									}
 								}
 							}
 						}
 					}
-					for (int z = 0; z < 16; z++) {
-						if (z == 0 || z == 15) {
-							for (int x = 0; x < 16; x++) {
-								if(y<321&&y>-65) {
-									Block b = chunk.getBlock(x, y, z);
-									if(b.getBlockData().getMaterial()!=Material.WATER && b.getBlockData().getMaterial()!=Material.LAVA)
-									{
-										if((b.getBlockData().getMaterial()==Material.AIR || b.getBlockData().getMaterial()==Material.CAVE_AIR) && particleLevel!=0)
-										{
-											world.spawnParticle(Particle.FIREWORKS_SPARK, b.getLocation().getX()+0.5, b.getLocation().getY()+0.5, b.getLocation().getZ()+0.5, 1);
-										}
-										else {
-											player.sendBlockDamage(b.getLocation(), 1.0f);
-										}
+				}
+				for (int z = 0; z < 16; z++) {
+					if (z == 0 || z == 15) {
+						for (int x = 0; x < 16; x++) {
+							if (y < 321 && y > -65) {
+								Block b = chunk.getBlock(x, y, z);
+								if (b.getBlockData().getMaterial() != Material.WATER
+										&& b.getBlockData().getMaterial() != Material.LAVA) {
+									if ((b.getBlockData().getMaterial() == Material.AIR
+											|| b.getBlockData().getMaterial() == Material.CAVE_AIR)) {
+										world.spawnParticle(Particle.FIREWORKS_SPARK, b.getLocation().getX() + 0.5,
+												b.getLocation().getY() + 0.5, b.getLocation().getZ() + 0.5, 1);
+									} else {
+										player.sendBlockDamage(b.getLocation(), 1.0f);
 									}
 								}
 							}
@@ -210,6 +204,7 @@ public class MyListener implements Listener
 					}
 				}
 			}
+		}
 		
 		alternatingTicks++;
 		
