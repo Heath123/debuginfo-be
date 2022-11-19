@@ -39,10 +39,6 @@ Toggle the Chunk Border Particle Level with `/f3 <ParticleLevel>`
 
 Information about this plugin use `/debuginfo-be`
 
-### Reporting Bugs
-* Bugs may be reported with Issues.
-* Please report any Major/Game-breaking bugs privately to any of the devs.
-
 Contributions are welcomed & appreciated!
 
 ## Screenshot 
