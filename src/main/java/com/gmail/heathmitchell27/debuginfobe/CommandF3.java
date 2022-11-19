@@ -60,6 +60,6 @@ public class CommandF3 implements CommandExecutor {
     {
     	sender.sendMessage(ChatColor.AQUA + "\nUse /f3 <ParticleLevel> for the amount of particles each block height."+"\nUsing \"/f3 0\" will turn off particles from spawning."
 	            +"\nExample of usage is \"/f3 1\" will show 4 levels of particles. (2 levels from player position to above your head and 2 below your head)"
-	            +"\n/f3 by default uses level 3. (12 total levels in height, 6 above 6 below.");
+	            +"\n/f3 by default uses level 2. (8 total levels in height, 4 above 4 below.");
     }
 }
