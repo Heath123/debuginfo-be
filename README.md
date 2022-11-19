@@ -26,7 +26,7 @@ A jar packaged version of the latest release can be downloaded from the latest p
 ## Support
 [![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.geysermc.org)
 
-Mention @Circuit10 or @TBYT
+Mention Circuit10 or @TBYT
 
 ## Usage
 
