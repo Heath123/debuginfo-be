@@ -17,6 +17,7 @@ A jar packaged version of the latest release can be downloaded from the latest p
 * Difficulty of Server.
 * Game Time of Day
 * Current Chunk. (X,Z)
+* SubChunk Position: Player's Position Correlating to the Chunk.
 * Chunk Borders! 
 * * inline edge of the 16x16 chunk is displayed as a border with block breaking animation or particle animation. (Thanks TBYT).
 * Current Player World/Dimension.
