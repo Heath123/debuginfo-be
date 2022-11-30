@@ -44,7 +44,7 @@ public class MyListener implements Listener
         //System.out.println("Hello, world!");
     }
 
-    private static DecimalFormat twoPlaces = new DecimalFormat("#.###");
+    private static DecimalFormat twoPlaces = new DecimalFormat("#.##");
     static HashMap<Player, BossBar> bossBarMap = new HashMap<>();
     static HashMap<Player, Boolean> showDebugScreenMap = new HashMap<>();
     private static int alternatingTicks = 0; //offsets the bukkitscheduler period every interval.
@@ -214,7 +214,7 @@ public class MyListener implements Listener
         debugString += "\nMode: "+ player.getGameMode();
         debugString += "\nView Distance: "+ player.getServer().getViewDistance();
         debugString += "\nSimulation Distance: "+ player.getServer().getSimulationDistance();
-        debugString += "\nTime:"+world.getTime()+"\n";
+        debugString += "\nTime: "+world.getTime()+"\n";
         debugString += "Pos: " +  twoPlaces.format(location.getX()) + ", " +  twoPlaces.format(location.getY()) +
                 ", " +  twoPlaces.format(location.getZ());
         //Rigorous Mathematics to determine player equivalent for Java Position Where At in Chunk (SubChunk?)
