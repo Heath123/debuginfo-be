@@ -44,7 +44,7 @@ Contributions are welcomed & appreciated!
 
 ## Screenshot 
 
-![Screenshot](https://user-images.githubusercontent.com/48810871/202431633-88617526-3171-43e6-9200-20146c5066b5.JPG)
+![Screenshot](https://user-images.githubusercontent.com/48810871/204699998-deda88ed-00f5-493f-9c7a-ba8fdc9637eb.JPG)
 
 ## Video Showcase
 

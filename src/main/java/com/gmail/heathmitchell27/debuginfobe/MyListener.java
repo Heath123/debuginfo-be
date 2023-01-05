@@ -20,6 +20,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.geysermc.floodgate.api.FloodgateApi;
 
 import java.text.DecimalFormat;
 import java.util.HashMap;
@@ -44,7 +45,7 @@ public class MyListener implements Listener
         //System.out.println("Hello, world!");
     }
 
-    private static DecimalFormat twoPlaces = new DecimalFormat("#.###");
+    private static DecimalFormat twoPlaces = new DecimalFormat("#.##");
     static HashMap<Player, BossBar> bossBarMap = new HashMap<>();
     static HashMap<Player, Boolean> showDebugScreenMap = new HashMap<>();
     private static int alternatingTicks = 0; //offsets the bukkitscheduler period every interval.
@@ -55,8 +56,9 @@ public class MyListener implements Listener
     public void onPlayerJoin(PlayerJoinEvent e) 
     {
     	Player player = e.getPlayer();
-    	if (BrandPluginMessageListener.playerBrands.get(player) == null ||
-                !BrandPluginMessageListener.playerBrands.get(player).equals("Geyser"))
+    	// Return if no brand yet sent or the player isn't on Geyser/floodgate.
+    	if ((BrandPluginMessageListener.playerBrands.get(player) == null || !BrandPluginMessageListener.playerBrands.get(player).equals("Geyser"))
+    			&&(!FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId())))
     	{
     		return;
     	}
@@ -80,10 +82,12 @@ public class MyListener implements Listener
     }
 
     public static void updateInfo(Player player, Location location) {
-        // Return if no brand yet sent
-        if (BrandPluginMessageListener.playerBrands.get(player) == null) return;
-        // Return if not Geyser
-        if (!BrandPluginMessageListener.playerBrands.get(player).equals("Geyser")) return;
+    	// Return if no brand yet sent or the player isn't on Geyser/floodgate.
+    	if ((BrandPluginMessageListener.playerBrands.get(player) == null || !BrandPluginMessageListener.playerBrands.get(player).equals("Geyser"))
+    			&&(!FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId())))
+    	{
+    		return;
+    	}
         BossBar currentBossBar = bossBarMap.get(player);
 
         Boolean currentOption = showDebugScreenMap.get(player);
@@ -143,7 +147,7 @@ public class MyListener implements Listener
     }
 
 	private static String getBossBarTitle(Player player, Location location) {
-		String debugString = "- F3 Debug Info for Geyser -\n\n";
+		String debugString = "- F3 Debug Information -\n\n";
 		World world = player.getWorld();
 		Chunk chunk = world.getChunkAt(player.getLocation());
 		
@@ -214,7 +218,7 @@ public class MyListener implements Listener
         debugString += "\nMode: "+ player.getGameMode();
         debugString += "\nView Distance: "+ player.getServer().getViewDistance();
         debugString += "\nSimulation Distance: "+ player.getServer().getSimulationDistance();
-        debugString += "\nTime:"+world.getTime()+"\n";
+        debugString += "\nTime: "+world.getTime()+"\n";
         debugString += "Pos: " +  twoPlaces.format(location.getX()) + ", " +  twoPlaces.format(location.getY()) +
                 ", " +  twoPlaces.format(location.getZ());
         //Rigorous Mathematics to determine player equivalent for Java Position Where At in Chunk (SubChunk?)

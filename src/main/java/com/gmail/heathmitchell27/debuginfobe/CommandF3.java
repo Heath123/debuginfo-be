@@ -5,6 +5,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.geysermc.floodgate.api.FloodgateApi;
 
 public class CommandF3 implements CommandExecutor {
 
@@ -15,14 +16,15 @@ public class CommandF3 implements CommandExecutor {
         {
 	    	if (sender instanceof Player) {
 	            Player player = (Player) sender;
-	
-	            // Return if no brand yet sent or the player isn't on Geyser
-	            if (BrandPluginMessageListener.playerBrands.get(player) == null ||
-	                    !BrandPluginMessageListener.playerBrands.get(player).equals("Geyser")) {
-	                sender.sendMessage(ChatColor.RED + "You don't appear to be a Geyser player!");
+	            
+	            // Return if no brand yet sent or the player isn't on Geyser/floodgate.
+	            if ((BrandPluginMessageListener.playerBrands.get(player) == null || !BrandPluginMessageListener.playerBrands.get(player).equals("Geyser"))
+	            		&&(!FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId())))
+	            {
+	                sender.sendMessage(ChatColor.RED + "You don't appear to be a Bedrock player!");
 	                return true;
 	            }
-	
+	            
 	            Boolean currentOption = MyListener.showDebugScreenMap.get(player);
 	            if (currentOption == null) currentOption = false;
 	
