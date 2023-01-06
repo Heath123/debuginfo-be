@@ -51,11 +51,21 @@ jobs:
       with:
         name: DebugInfo-Be-Plugin-Latest
         path: staging/debuginfo-be.jar
+        
 #     - name: Generate release diff
 #       env:
 #         BEGIN_COMMIT: ${{ steps.get-previous-tag.outputs.tag }}
 #         END_COMMIT: ${{ steps.lookupPluginVersion.outputs.result }}
 #       run: git fetch --tags --force && git log --pretty=format:"* %s (%h)" ${BEGIN_COMMIT}..${END_COMMIT} > release_notes.md
+
+    #Using this to delete releases that only have the tag "release" when maven build is successful
+    - uses: dev-drprasad/delete-tag-and-release@v0.2.0
+      with:
+        tag_name: release #(required) tag name to delete 
+        delete_release: true #(optional) default: true 
+        repo: <owner>/<repoName> #(optional) target repository. default: repo running this action
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Create release
       uses: ncipollo/release-action@v1
       with:
@@ -66,6 +76,7 @@ jobs:
         prerelease: false
         tag: "release" #${{steps.lookupPluginVersion.outputs.result}}
         token: ${{ secrets.GITHUB_TOKEN }}
+        
 #     - name: Upload jar to server
 #       env:
 #         PTERODACTYL_TOKEN: ${{ secrets.PTERODACTYL_TOKEN }}
