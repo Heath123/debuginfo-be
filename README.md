@@ -29,6 +29,13 @@ A jar packaged version of the latest release can be downloaded from the latest p
 
 Mention Circuit10 or @TBYT
 
+## Disclaimers
+
+A scenario of using a proxy, e.g. Velocity, and geyser auth type offline will result in this plugin not working.
+
+Remember, Cracked servers are not supported by GeyserMC and by setting your server as so, you will not receive active support.
+"Cracked" or "offline mode" servers basically disable any sort of Mojang authentication and allow people with non-genuine versions of the game to join. Unless the server is behind an online mode BungeeCord instance, This is software piracy and is illegal!. By setting your server as so, you are condoning the use of piracy.
+
 ## Usage
 
 Toggle the debug HUD with `/f3`
