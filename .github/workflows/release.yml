@@ -63,7 +63,7 @@ jobs:
       with:
         tag_name: release #(required) tag name to delete 
         delete_release: true #(optional) default: true 
-        repo: <owner>/<repoName> #(optional) target repository. default: repo running this action
+        #repo: <owner>/<repoName> #(optional) target repository. default: repo running this action
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Create release
