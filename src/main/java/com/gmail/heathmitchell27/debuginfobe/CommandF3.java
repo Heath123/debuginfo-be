@@ -17,7 +17,7 @@ public class CommandF3 implements CommandExecutor {
 	    	if (sender instanceof Player) {
 	            Player player = (Player) sender;
 	            
-	            // Return if no brand yet sent or the player isn't on Geyser/floodgate.
+	            // Return if player is not on floodgate and if no brand yet sent or the player isn't on Geyser.
 	            if ((BrandPluginMessageListener.playerBrands.get(player) == null || !BrandPluginMessageListener.playerBrands.get(player).equals("Geyser"))
 	            		&&(!FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId())))
 	            {
