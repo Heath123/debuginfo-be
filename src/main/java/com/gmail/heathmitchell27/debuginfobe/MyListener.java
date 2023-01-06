@@ -62,8 +62,6 @@ public class MyListener implements Listener
     	{
     		return;
     	}
-    	String defaultMessage = e.getJoinMessage();
-		e.setJoinMessage(defaultMessage+"\n"+ChatColor.AQUA+"Use /f3 to disable or enable debug menu.");
 		e.getPlayer().sendMessage("\n"+ChatColor.AQUA+"Use /f3 to disable or enable debug menu.");
     }
     
