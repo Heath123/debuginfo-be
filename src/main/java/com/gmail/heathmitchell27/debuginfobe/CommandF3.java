@@ -7,11 +7,17 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.geysermc.floodgate.api.FloodgateApi;
 
-public class CommandF3 implements CommandExecutor {
+public class CommandF3 implements CommandExecutor
+{
+	MyListener myListener;
+    public CommandF3(MyListener myListener) {
+		this.myListener = myListener;
+	}
 
-    // This method is called, when somebody uses our command
+	// This method is called, when somebody uses our command
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) 
+    {
         if(label.equals("f3"))
         {
 	    	if (sender instanceof Player) {
@@ -32,7 +38,7 @@ public class CommandF3 implements CommandExecutor {
 	            	if(args.length==1)
 	            	{
 	            		int number = Integer.parseInt(args[0]);
-	            		MyListener.particleLevel = number;
+	            		myListener.setParticleLevel(sender, number);
 	            	}
 	            }
 	            catch (NumberFormatException e) {

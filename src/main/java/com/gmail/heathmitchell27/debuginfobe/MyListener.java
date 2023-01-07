@@ -14,12 +14,14 @@ import org.bukkit.block.Block;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.plugin.Plugin;
 import org.geysermc.floodgate.api.FloodgateApi;
 
 import java.text.DecimalFormat;
@@ -43,12 +45,36 @@ public class MyListener implements Listener {
 		// System.out.println("Hello, world!");
 	}
 
+	private final Plugin plugin;
 	private static DecimalFormat twoPlaces = new DecimalFormat("#.##");
 	static HashMap<Player, BossBar> bossBarMap = new HashMap<>();
 	static HashMap<Player, Boolean> showDebugScreenMap = new HashMap<>();
 	private static int alternatingTicks = 0; // offsets the bukkitscheduler period every interval.
-	static int particleLevel = 2;
-	static boolean changedDimensionsEvent;
+	private static boolean changedDimensionsEvent;
+	private int particleLevel = 2;
+	private int particleMultiplier = 4;
+	private int maxParticleLevel = 4;
+	private DebugInfoBeConfiguration config = new DebugInfoBeConfiguration();
+	
+	public int getParticleLevel() {
+		return particleLevel;
+	}
+
+	public void setParticleLevel(CommandSender sender, int particleLevel) {
+		if (particleLevel > maxParticleLevel)
+			sender.sendMessage("\n" + ChatColor.RED + "Number too large for particles!");
+		else
+			this.particleLevel = particleLevel;
+	}
+	
+	public MyListener(Plugin plugin, DebugInfoBeConfiguration config) 
+	{
+		this.plugin = plugin;
+		this.config = config;
+        this.particleLevel = config.defaultParticleLevel();
+        this.particleMultiplier = config.defaultParticleMultiplier();
+        this.maxParticleLevel = config.defaultMaxParticleLevel();
+    }
 
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent e) {
@@ -82,7 +108,7 @@ public class MyListener implements Listener {
 		alternatingTicks = 0;
 	}
 
-	public static void updateInfo(Player player, Location location) {
+	public void updateInfo(Player player, Location location) {
 		if (!isGeyserPlayer(player))
 			return;
 		BossBar currentBossBar = bossBarMap.get(player);
@@ -129,14 +155,8 @@ public class MyListener implements Listener {
 		if (targetBlock == null || targetBlock.getLocation() == null) {
 			player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("-"));
 		} else {
-			// Light does not work properly, left out of implementation: new
-			// TextComponent("Light: "+targetBlock.getLightLevel()+"
-			// ("+targetBlock.getLightFromSky()+" Sky, "+targetBlock.getLightFromBlocks()+"
-			// block)\n"+
 			player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
-					new TextComponent(targetBlock.getBlockData().getAsString().replaceFirst("^minecraft:", "") // Frees
-																												// up
-																												// space
+					new TextComponent(targetBlock.getBlockData().getAsString().replaceFirst("^minecraft:", "")
 							.replaceAll(",", ",\n") // Split onto
 							.replaceAll("\\[", "\n[") // multiple lines
 							+ "\nBlock at: " + (int) targetBlock.getLocation().getX() + ", "
@@ -144,20 +164,16 @@ public class MyListener implements Listener {
 		}
 	}
 
-	private static String getBossBarTitle(Player player, Location location) {
+	private String getBossBarTitle(Player player, Location location) {
 		String debugString = "- F3 Debug Information -\n\n";
 		World world = player.getWorld();
 		Chunk chunk = world.getChunkAt(player.getLocation());
+		
+		// y level multiplier for a row of particles.
+		int n = particleLevel * particleMultiplier;
 
 		// adding alternating intervals decreases amount of times visual effect appears,
-		// reducing lag.
-		if (particleLevel > 4) {
-			particleLevel = 2;
-			player.sendMessage("\n" + ChatColor.RED + "Number too large for particles!");
-		}
-		// y level multiplier for a row of particles.
-		int n = particleLevel * 4;
-
+				// reducing lag.
 		if (alternatingTicks % 2 == 0) {
 			int y = (int) player.getLocation().getY() + 1; // adding one to spawn the particles one block higher to be
 															// in the middle of the player.
@@ -218,8 +234,8 @@ public class MyListener implements Listener {
 		debugString += "\nMode: " + player.getGameMode();
 		debugString += "\nView Distance: " + player.getServer().getViewDistance();
 		debugString += "\nSimulation Distance: " + player.getServer().getSimulationDistance();
-		debugString += "\nTime: " + world.getTime() + "\n";
-		debugString += "Pos: " + twoPlaces.format(location.getX()) + ", " + twoPlaces.format(location.getY()) + ", "
+		debugString += "\nTime: " + world.getTime();
+		debugString += "\nPos: " + twoPlaces.format(location.getX()) + ", " + twoPlaces.format(location.getY()) + ", "
 				+ twoPlaces.format(location.getZ());
 		// Rigorous Mathematics to determine player equivalent for Java Position Where
 		// At in Chunk (SubChunk?)
