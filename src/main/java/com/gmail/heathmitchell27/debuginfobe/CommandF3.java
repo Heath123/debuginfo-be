@@ -6,9 +6,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.GameRule;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerChangedWorldEvent;
 
 public class CommandF3 implements CommandExecutor {
 
@@ -72,19 +69,6 @@ public class CommandF3 implements CommandExecutor {
         			+ "\nFor commands use /f3 ?");
         }
         return true;
-    }
-    
-    /**
-     * 
-     * used if entering a world with reduced debug info enabled
-     * 
-     */
-    @EventHandler
-    public void onPlayerWorldChange(PlayerChangedWorldEvent event) {
-        if (event.getPlayer().getWorld().getGameRuleValue(GameRule.REDUCED_DEBUG_INFO) == true && MyListener.showDebugScreenMap.get(event.getPlayer()) == true) {
-            MyListener.showDebugScreenMap.remove(event.getPlayer());
-            MyListener.bossBarMap.remove(event.getPlayer());
-        }
     }
     
     public void help(CommandSender sender)
