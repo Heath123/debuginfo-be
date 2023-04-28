@@ -20,6 +20,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 
 import java.text.DecimalFormat;
 import java.util.HashMap;
@@ -77,6 +78,19 @@ public class MyListener implements Listener
     {
     	changedDimensionsEvent = true;
     	alternatingTicks=0;
+    }
+    
+    /**
+     * 
+     * used if entering a world with reduced debug info enabled
+     * 
+     */
+    @EventHandler
+    public void onPlayerWorldChange(PlayerChangedWorldEvent event) {
+        if (event.getPlayer().getWorld().getGameRuleValue(GameRule.REDUCED_DEBUG_INFO) == true && MyListener.showDebugScreenMap.get(event.getPlayer()) == true) {
+            MyListener.showDebugScreenMap.remove(event.getPlayer());
+            MyListener.bossBarMap.remove(event.getPlayer());
+        }
     }
 
     public static void updateInfo(Player player, Location location) {
