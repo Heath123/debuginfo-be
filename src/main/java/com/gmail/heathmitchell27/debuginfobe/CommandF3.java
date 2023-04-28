@@ -5,6 +5,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.GameRule<T>;
 
 public class CommandF3 implements CommandExecutor {
 
@@ -29,15 +30,29 @@ public class CommandF3 implements CommandExecutor {
 	            try {
 	            	if(args.length==1)
 	            	{
-	            		int number = Integer.parseInt(args[0]);
-	            		MyListener.particleLevel = number;
+				if (player.getWorld().getGameRule(GameRule.REDUCED_DEBUG_INFO) == false)
+				{
+	            			int number = Integer.parseInt(args[0]);
+	            			MyListener.particleLevel = number;
+				}
+				else {
+					sender.sendMessage(ChatColor.RED + "You cannot use this in a world with reduced debug info enabled!");
+				}
 	            	}
 	            }
 	            catch (NumberFormatException e) {
 	            	help(sender);
 	            }
 	            if(args.length==0)
-	            	MyListener.showDebugScreenMap.put(player, !currentOption);
+		    {
+			if (player.getWorld().getGameRule(GameRule.REDUCED_DEBUG_INFO) == false)
+			{
+	            		MyListener.showDebugScreenMap.put(player, !currentOption);
+			}
+			else {
+				sender.sendMessage(ChatColor.RED + "You cannot use this in a world with reduced debug info enabled!");
+			}
+		    }
 	        } else {
 	            sender.sendMessage(ChatColor.RED + "You cannot use this from the console!");
 	        }
