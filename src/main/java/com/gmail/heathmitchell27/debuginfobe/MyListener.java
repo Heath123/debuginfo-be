@@ -262,6 +262,7 @@ public class MyListener implements Listener
 
         // https://stackoverflow.com/questions/35831619/get-the-direction-a-player-is-looking - second answer
         float yaw = location.getYaw();
+	float pitch = location.getPitch();
         if (yaw < 0) {
             yaw += 360;
         }
@@ -276,6 +277,7 @@ public class MyListener implements Listener
         } else {
             debugString += "north (towards -Z)";
         }
+	debugString += "\nYaw: " + yaw + "\nPitch: " + pitch;
         
         return debugString;
     }
