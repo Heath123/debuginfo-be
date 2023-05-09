@@ -59,7 +59,7 @@ jobs:
 #       run: git fetch --tags --force && git log --pretty=format:"* %s (%h)" ${BEGIN_COMMIT}..${END_COMMIT} > release_notes.md
 
     #Using this to delete releases that only have the tag "release" when maven build is successful
-    - uses: dev-drprasad/delete-tag-and-release@v0.2.0
+    - uses: dev-drprasad/delete-tag-and-release@v0.2.1
       with:
         tag_name: release #(required) tag name to delete 
         delete_release: true #(optional) default: true 
