@@ -5,24 +5,32 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.geysermc.floodgate.api.FloodgateApi;
 
-public class CommandF3 implements CommandExecutor {
+public class CommandF3 implements CommandExecutor
+{
+	MyListener myListener;
+    public CommandF3(MyListener myListener) {
+		this.myListener = myListener;
+	}
 
-    // This method is called, when somebody uses our command
+	// This method is called, when somebody uses our command
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) 
+    {
         if(label.equals("f3"))
         {
 	    	if (sender instanceof Player) {
 	            Player player = (Player) sender;
-	
-	            // Return if no brand yet sent or the player isn't on Geyser
-	            if (BrandPluginMessageListener.playerBrands.get(player) == null ||
-	                    !BrandPluginMessageListener.playerBrands.get(player).equals("Geyser")) {
-	                sender.sendMessage(ChatColor.RED + "You don't appear to be a Geyser player!");
+	            
+	            // Return if player is not on floodgate and if no brand yet sent or the player isn't on Geyser.
+	            if ((BrandPluginMessageListener.playerBrands.get(player) == null || !BrandPluginMessageListener.playerBrands.get(player).equals("Geyser"))
+	            		&&(!FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId())))
+	            {
+	                sender.sendMessage(ChatColor.RED + "You don't appear to be a Bedrock player!");
 	                return true;
 	            }
-	
+	            
 	            Boolean currentOption = MyListener.showDebugScreenMap.get(player);
 	            if (currentOption == null) currentOption = false;
 	
@@ -30,7 +38,7 @@ public class CommandF3 implements CommandExecutor {
 	            	if(args.length==1)
 	            	{
 	            		int number = Integer.parseInt(args[0]);
-	            		MyListener.particleLevel = number;
+	            		myListener.setParticleLevel(sender, number);
 	            	}
 	            }
 	            catch (NumberFormatException e) {
