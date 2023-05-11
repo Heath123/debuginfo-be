@@ -50,7 +50,7 @@ public class MyListener implements Listener {
 	static HashMap<Player, BossBar> bossBarMap = new HashMap<>();
 	static HashMap<Player, Boolean> showDebugScreenMap = new HashMap<>();
 	private static int alternatingTicks = 0; // offsets the bukkitscheduler period every interval.
-	//default values although the config will override theese.
+	private static boolean changedDimensionsEvent;
 	private int particleLevel = 2;
 	private int particleMultiplier = 4;
 	private int maxParticleLevel = 4;
@@ -97,8 +97,15 @@ public class MyListener implements Listener {
 
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent e) {
+		alternatingTicks = 0;
 		Player player = e.getPlayer();
 		updateInfo(player, e.getTo());
+	}
+
+	@EventHandler
+	public void onDimensionChange(PlayerChangedWorldEvent e) {
+		changedDimensionsEvent = true;
+		alternatingTicks = 0;
 	}
 
 	public void updateInfo(Player player, Location location) {
@@ -126,8 +133,24 @@ public class MyListener implements Listener {
 			currentBossBar = Bukkit.createBossBar(getBossBarTitle(player, location), BarColor.BLUE, BarStyle.SOLID);
 			currentBossBar.addPlayer(player);
 			bossBarMap.put(player, currentBossBar);
-		} else
+		} else {
+			// When switching dimensions, bossbar does not appear, re-enable when switching
+			// dimensions only.
+			// If bossbar immediately does not appear, stand still for 8 intervals. (2
+			// seconds)
+			if (changedDimensionsEvent == true && alternatingTicks == 8) {
+				currentBossBar.removePlayer(player);
+				currentBossBar.addPlayer(player);
+				changedDimensionsEvent = false;
+			}
+
 			currentBossBar.setTitle(getBossBarTitle(player, location));
+			if (alternatingTicks > 0 && alternatingTicks % 5 == 0) {
+				currentBossBar.setColor(BarColor.GREEN);
+			} else {
+				currentBossBar.setColor(BarColor.BLUE);
+			}
+		}
 
 		if (targetBlock == null || targetBlock.getLocation() == null) {
 			player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("-"));
